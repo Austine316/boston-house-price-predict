@@ -5,13 +5,14 @@ import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.ensemble import RandomForestRegressor
 import pickle
+import numpy as np
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 
 st.write("""
 # Boston House Price Prediction App
 
-This app predicts the **Boston House Price**!
+This app predicts the **Boston House Price**! Data used for training can be found [here](http://lib.stat.cmu.edu/datasets/boston)
 """)
 st.write('---')
 
@@ -63,8 +64,9 @@ st.header('Specified Input parameters')
 st.write(df)
 st.write('---')
 
-# Load the boston model
-model = pickle.load(open('boston.pkl', 'rb'))
+# Build Regression Model
+model = RandomForestRegressor()
+model.fit(X, Y)
 
 # Apply Model to Make Prediction
 prediction = model.predict(df)
