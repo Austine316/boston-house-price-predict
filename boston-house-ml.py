@@ -16,10 +16,18 @@ This app predicts the **Boston House Price**! Data used for training can be foun
 """)
 st.write('---')
 
+
+
+
 # Loads the Boston House Price Dataset
-boston = datasets.load_boston()
-X = pd.DataFrame(boston.data, columns=boston.feature_names)
-Y = pd.DataFrame(boston.target, columns=["MEDV"])
+data_url = "http://lib.stat.cmu.edu/datasets/boston"
+raw_df = pd.read_csv(data_url, sep="\s+", skiprows=22, header=None)
+X = np.hstack([raw_df.values[::2, :], raw_df.values[1::2, :2]])
+Y = raw_df.values[1::2, 2]
+
+df = pd.DataFrame(X)
+X = df.rename(columns={0: "CRIM", 1: "ZN", 2: "INDUS", 3: "CHAS", 4: "NOX", 5: "RM", 
+                   6: "AGE", 7: "DIS", 8: "RAD", 9: "TAX", 10: "PTRATIO", 11: "B", 12: "LSTAT"})
 # Sidebar
 # Header of Specify Input Parameters
 st.sidebar.header(f'Specify Input Parameters')
@@ -65,7 +73,7 @@ st.write('---')
 
 # Build Regression Model
 model = RandomForestRegressor()
-model.fit(X, np.ravel(Y))
+model.fit(X, Y)
 
 # Apply Model to Make Prediction
 prediction = model.predict(df)
